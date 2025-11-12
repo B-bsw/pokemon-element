@@ -17,8 +17,8 @@ const TablePokemon = () => {
                 <tbody>
                     {typeChart.map((e) => (
                         <tr key={e.name}>
-                            <td className='border-r-transparent'>
-                                <div className='w-10'>
+                            <td className="border-r-transparent">
+                                <div className="w-10">
                                     <Image
                                         src={iconElements(e.name)}
                                         alt="image"

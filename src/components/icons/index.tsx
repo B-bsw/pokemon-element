@@ -18,6 +18,7 @@ import psychic from './psychic.svg'
 import rock from './rock.svg'
 import steel from './steel.svg'
 import water from './water.svg'
+import Image from 'next/image'
 
 const icons: Record<string, string> = {
   bug,
@@ -42,4 +43,19 @@ const icons: Record<string, string> = {
 
 export default function iconElements(element: string = 'bug') {
   return icons[element.toLowerCase()] ?? null
+}
+
+export const icon2TagSvg = (element: string = 'bug', size: number = 24) => {
+  const src = icons[element.toLowerCase()]
+  if (!src) return null
+
+  return (
+    <Image
+      src={src}
+      alt={element}
+      width={size}
+      height={size}
+      className={`inline-block align-middle icon ${element.toLocaleLowerCase()}`}
+    />
+  )
 }
