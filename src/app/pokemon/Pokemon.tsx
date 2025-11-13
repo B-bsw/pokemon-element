@@ -35,9 +35,9 @@ const Pokemon = () => {
         }
     }
 
-    useEffect(() => {
-        console.log('dataInput:', dataInput)
-    }, [dataInput])
+    // useEffect(() => {
+    //     console.log('dataInput:', dataInput)
+    // }, [dataInput])
 
     return (
         <div className="flex flex-col items-center justify-center gap-2 p-4">
@@ -90,39 +90,49 @@ const Pokemon = () => {
 
             <section>
                 <div className="mt-4 text-sm">
-                    <table className="border [&_th,td]:border [&_th,td]:px-2 [&_th,td]:py-1">
-                        <thead>
-                            <th colSpan={2}>Element</th>
-                            <th>Strong</th>
-                            <th>Weak</th>
-                            <th>NoEffectFrom</th>
-                        </thead>
-                        <tbody>
-                            {poke
-                                .filter((type) => dataInput.includes(type.name))
-                                .map((e) => (
-                                    <tr key={e.name}>
-                                        <td className="border-r-transparent">
-                                            <div className="w-10">
-                                                <Image
-                                                    src={iconElements(e.name)}
-                                                    alt="image"
-                                                    width={30}
-                                                    height={30}
-                                                    className={`icon ${e.name.toLowerCase()}`}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>{e.name}</div>
-                                        </td>
-                                        <td>{e.strongAgainst.join(', ')}</td>
-                                        <td>{e.weakAgainst.join(', ')}</td>
-                                        <td>{e.noEffectFrom.join(', ')}</td>
-                                    </tr>
-                                ))}
-                        </tbody>
-                    </table>
+                    {dataInput[0].length > 1 && (
+                        <table className="border [&_th,td]:border [&_th,td]:px-2 [&_th,td]:py-1">
+                            <thead>
+                                <tr>
+                                    <th colSpan={2}>Element</th>
+                                    <th>Strong</th>
+                                    <th>Weak</th>
+                                    <th>NoEffectFrom</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {poke
+                                    .filter((type) =>
+                                        dataInput.includes(type.name),
+                                    )
+                                    .map((e) => (
+                                        <tr key={e.name}>
+                                            <td className="border-r-transparent">
+                                                <div className="w-10">
+                                                    <Image
+                                                        src={iconElements(
+                                                            e.name,
+                                                        )}
+                                                        alt="image"
+                                                        width={30}
+                                                        height={30}
+                                                        className={`icon ${e.name.toLowerCase()}`}
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>{e.name}</div>
+                                            </td>
+                                            <td>
+                                                {e.strongAgainst.join(', ')}
+                                            </td>
+                                            <td>{e.weakAgainst.join(', ')}</td>
+                                            <td>{e.noEffectFrom.join(', ')}</td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </section>
         </div>
