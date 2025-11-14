@@ -1,9 +1,11 @@
-import Pokemon from "./Pokemon"
+import Pokemon from './Pokemon'
 
-const Page = () =>{
-    return <>
-        <Pokemon/>
-    </>
+const Page = () => {
+    return (
+        <>
+            <Pokemon />
+        </>
+    )
 }
 
 export default Page
