@@ -1,5 +1,9 @@
-import Pokemon from './Pokemon'
+import Pokemon from "./Pokemon"
 
-export default function Page() {
-    return <Pokemon />
+const Page = () =>{
+    return <>
+        <Pokemon/>
+    </>
 }
+
+export default Page
