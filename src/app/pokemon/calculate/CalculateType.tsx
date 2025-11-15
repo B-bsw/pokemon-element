@@ -1,7 +1,13 @@
 'use client'
 
 import { Key, useEffect, useState } from 'react'
-import { Autocomplete, AutocompleteItem, Button, Divider } from '@heroui/react'
+import {
+    Autocomplete,
+    AutocompleteItem,
+    Button,
+    Divider,
+    Tooltip,
+} from '@heroui/react'
 import poke from '@/libs/DataElement'
 import iconElements, { icon2TagSvg } from '@/components/icons'
 import { Minus, Plus, RefreshCcw } from 'lucide-react'
@@ -45,12 +51,9 @@ const Pokemon = () => {
     const mergeUnique = (
         key: 'strongAgainst' | 'weakAgainst' | 'noEffectFrom',
     ) => {
-        return [...new Set(selectedTypes.flatMap((t) => t[key]))]
+        const merge = [...new Set(selectedTypes.flatMap((t) => t[key]))]
+        return merge.length === 0 ? [...new Set('-')] : merge
     }
-
-    // useEffect(() => {
-    //     console.log('dataInput:', dataInput)
-    // }, [dataInput])
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gradient-to-b from-white to-zinc-50 p-4 md:p-8">
@@ -79,35 +82,41 @@ const Pokemon = () => {
                     ))}
 
                     <div className="mt-2 flex gap-3">
-                        <Button
-                            isIconOnly
-                            isDisabled={count.length >= 2}
-                            color="default"
-                            disableRipple
-                            onPress={handleAdd}
-                            className="rounded-full shadow-sm transition-transform hover:scale-105"
-                        >
-                            <Plus />
-                        </Button>
-                        <Button
-                            isIconOnly
-                            isDisabled={count.length <= 1}
-                            color="danger"
-                            disableRipple
-                            onPress={handleRemove}
-                            className="rounded-full shadow-sm transition-transform hover:scale-105"
-                        >
-                            <Minus />
-                        </Button>
-                        <Button
-                            isIconOnly
-                            color="primary"
-                            disableRipple
-                            onPress={handleReset}
-                            className="rounded-full shadow-sm transition-transform hover:scale-105"
-                        >
-                            <RefreshCcw />
-                        </Button>
+                        <Tooltip content="add" color="default" delay={1000} closeDelay={0}>
+                            <Button
+                                isIconOnly
+                                isDisabled={count.length >= 2}
+                                color="default"
+                                disableRipple
+                                onPress={handleAdd}
+                                className="rounded-full shadow-sm transition-transform hover:scale-105"
+                            >
+                                <Plus />
+                            </Button>
+                        </Tooltip>
+                        <Tooltip content="delete" color="danger" delay={1000} closeDelay={0}>
+                            <Button
+                                isIconOnly
+                                isDisabled={count.length <= 1}
+                                color="danger"
+                                disableRipple
+                                onPress={handleRemove}
+                                className="rounded-full shadow-sm transition-transform hover:scale-105"
+                            >
+                                <Minus />
+                            </Button>
+                        </Tooltip>
+                        <Tooltip content="reset" color="primary" delay={1000} closeDelay={0}>
+                            <Button
+                                isIconOnly
+                                color="primary"
+                                disableRipple
+                                onPress={handleReset}
+                                className="rounded-full shadow-sm transition-transform hover:scale-105"
+                            >
+                                <RefreshCcw />
+                            </Button>
+                        </Tooltip>
                     </div>
                 </div>
             </header>
@@ -115,7 +124,7 @@ const Pokemon = () => {
             <section className="mt-6 w-full max-w-5xl">
                 <div className="overflow-x-auto rounded-xl bg-white shadow-md">
                     {dataInput[0].length > 1 && (
-                        <table className="w-full min-w-[600px] border-collapse text-sm text-zinc-800 md:text-base [&_td]:p-3 [&_td,th]:text-center [&_td]:align-middle">
+                        <table className="w-full min-w-[600px] border-collapse text-sm text-zinc-800 md:text-base [&_td]:p-3 [&_td]:align-middle [&_td,th]:text-center">
                             <thead className="bg-gradient-to-r from-zinc-100 to-zinc-200 text-zinc-700">
                                 <tr>
                                     <th
@@ -167,16 +176,18 @@ const Pokemon = () => {
 
                                     <td>
                                         {mergeUnique('strongAgainst').join(
-                                            ', ',
+                                            ' - ',
                                         )}
                                     </td>
 
                                     <td>
-                                        {mergeUnique('weakAgainst').join(', ')}
+                                        {mergeUnique('weakAgainst').join(' - ')}
                                     </td>
 
                                     <td>
-                                        {mergeUnique('noEffectFrom').join(', ')}
+                                        {mergeUnique('noEffectFrom').join(
+                                            ' - ',
+                                        )}
                                     </td>
                                 </tr>
                             </tbody>

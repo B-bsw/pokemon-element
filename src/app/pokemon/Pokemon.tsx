@@ -13,7 +13,7 @@ import {
 } from '@heroui/react'
 import axios from 'axios'
 import Image from 'next/image'
-import { ImgHTMLAttributes, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type Pokemon = {
     id: number
