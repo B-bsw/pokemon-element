@@ -3,6 +3,7 @@
 import {
     getKeyValue,
     Pagination,
+    Spinner,
     Table,
     TableBody,
     TableCell,
@@ -11,12 +12,14 @@ import {
     TableRow,
 } from '@heroui/react'
 import axios from 'axios'
-import { useEffect, useMemo, useState } from 'react'
+import Image from 'next/image'
+import { ImgHTMLAttributes, useEffect, useMemo, useState } from 'react'
 
 type Pokemon = {
     id: number
     name: string
     numberOfPokemon: string
+    img: string
 }[]
 
 export default function Pokemon() {
@@ -41,13 +44,13 @@ export default function Pokemon() {
                           : (index + 1).toString().length === 3
                             ? `0${index + 1}`
                             : index.toString(),
+                img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index >= 1025 ? index + 8976 : index + 1}.png`,
             }))
             setDataPokemon(dataWithIndex)
             setPage(1)
+            setIsLoading(false)
         } catch (err) {
             console.log(err)
-        } finally {
-            setIsLoading(false)
         }
     }
 
@@ -64,7 +67,10 @@ export default function Pokemon() {
             key: 'name',
             label: 'name',
         },
-        { key: 'numberOfPokemon', label: 'No.' },
+        {
+            key: 'numberOfPokemon',
+            label: 'No.',
+        },
     ]
 
     const pages = Math.ceil(dataPokemon.length / 10)
@@ -80,6 +86,10 @@ export default function Pokemon() {
             <div className="flex h-screen w-full items-center justify-center p-4">
                 <section className="w-full max-w-xl overflow-auto">
                     <Table
+                        classNames={{
+                            th: 'text-center',
+                            td: 'text-center',
+                        }}
                         aria-label="table-of-pokemon"
                         bottomContent={
                             page > 0 ? (
@@ -100,7 +110,10 @@ export default function Pokemon() {
                     >
                         <TableHeader columns={columns}>
                             {(column) => (
-                                <TableColumn key={column.key}>
+                                <TableColumn
+                                    key={column.key}
+                                    // colSpan={column.label === 'name' ? 2 : 1}
+                                >
                                     {column.label}
                                 </TableColumn>
                             )}
@@ -109,16 +122,28 @@ export default function Pokemon() {
                             items={items}
                             emptyContent={'No Pokemon.'}
                             isLoading={isLoading}
-                            loadingContent={<div>Loading</div>}
+                            loadingContent={<Spinner />}
                         >
                             {(item) => (
                                 <TableRow key={item?.name}>
-                                    {(pokemon) => (
-                                        <>
-                                            <TableCell>
-                                                {getKeyValue(item, pokemon)}
-                                            </TableCell>
-                                        </>
+                                    {(key) => (
+                                        <TableCell>
+                                            {key === 'name' ? (
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <Image
+                                                        src={item.img}
+                                                        alt="pokemon"
+                                                        width={32}
+                                                        height={32}
+                                                    />
+                                                    <span className="capitalize">
+                                                        {item.name}
+                                                    </span>
+                                                </div>
+                                            ) : (
+                                                getKeyValue(item, key)
+                                            )}
+                                        </TableCell>
                                     )}
                                 </TableRow>
                             )}
